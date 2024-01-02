@@ -6,3 +6,5 @@ Student Info
 * Student Name: USTH ICT Ly Nhat Huy
 * Student ID: 22BI13191
 
+* CLASS : G3 - Advanced Programming with Python
+
