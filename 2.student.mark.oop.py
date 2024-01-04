@@ -51,7 +51,7 @@ class Student(Entity):
     def set_dob(self, dob):
         self.__dob = dob
 
-    def get_dob(dob):
+    def get_dob(self):
         return self.__dob
     
     def input(self):
@@ -113,6 +113,10 @@ class SchoolSystem(Entity):
             i = i+1
 
     def show_student_marks(self, course):
+        if course.get_marks() == {}:
+            os.system('cls')
+            print("No mark added yet :(")
+            return
         print(f"---------STUDENT MARKS OF {course.get_name()} COURSE---------")
         for student_id, mark in course.get_marks().items():
             student = self.student_by_id(student_id)
@@ -142,23 +146,36 @@ Student_list = Student()
 Course_list = Course()
 
 while True:
+    print("\n")
     user_choice = display_menu()
 
     if user_choice == '1':
         os.system('cls')
         if school.courses == []:
             print("You haven't add any courses yet")
-        school.list_courses()
+        else:
+            school.list_courses()
     elif user_choice == '2':
         os.system('cls')
         if school.students == []:
             print("You haven't add any student yet")
-        school.list_students()
+        else:
+            school.list_students()
     elif user_choice == '3':
         os.system('cls')
-        school.list_courses()
-        course_choice = int(input("Enter the course number to show student marks: "))
-        school.show_student_marks(school.courses[course_choice - 1])
+        if school.courses == []:
+            print("You haven't add any courses yet")
+        else :
+            school.list_courses()
+            while True:
+                course_choice = int(input("Enter the course number to show marks for a student ( 0 to quit ) : "))
+                if (course_choice < 0 or course_choice > len(school.courses)):
+                    print("Wrong input")
+                elif course_choice == 0 :
+                    break
+                else :
+                    school.show_student_marks(school.courses[course_choice - 1])
+                    break
     elif user_choice == '4':
         os.system('cls')
         new_students = Student_list.input()
@@ -172,14 +189,28 @@ while True:
     elif user_choice == '6':
         os.system('cls')
         school.list_courses()
-        course_choice = int(input("Enter the course number to add marks for a student: "))
+        while True:
+            course_choice = int(input("Enter the course number to add marks for a student ( 0 to quit ): "))
+            if (course_choice < 0 or course_choice > len(school.courses)):
+                print("Wrong input")
+            elif course_choice == 0 :
+                break
+            else:
+                break 
         school.list_students()
-        student_choice = int(input("Enter the student number to add marks: "))
-        mark = float(input(f"Enter marks for {school.students[student_choice - 1].get_name()} "
+        while True :
+            student_choice = int(input("Enter the student number to add marks ( 0 to quit ) : "))
+            if (student_choice < 0 or student_choice > len(school.students)):
+                print("Wrong input")
+            elif course_choice == 0 :
+                break
+            else :
+                mark = float(input(f"Enter marks for {school.students[student_choice - 1].get_name()} "
                             f"({school.students[student_choice - 1].get_id()}) in "
                             f"{school.courses[course_choice - 1].get_name()}: "))
-        school.courses[course_choice - 1].set_marks(school.students[student_choice - 1].get_id(), mark)
-        print("Marks added successfully!")
+                school.courses[course_choice - 1].set_marks(school.students[student_choice - 1].get_id(), mark)
+                print("Marks added successfully!")
+                break
     elif user_choice == '7':
         os.system('cls')
         print("Exiting program. Goodbye!")
