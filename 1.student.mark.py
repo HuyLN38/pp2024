@@ -36,6 +36,7 @@ def GetCourseInformation(courseNo, courses):
     courses.append({'id': course_id, 'name': course_name})
 
 def student_mark(course, students):
+    global marks
     marks = {}
     print(f"Enter marks for students in course {course['name']}:")
     for student in students:
@@ -82,6 +83,7 @@ students = []
 # Input course information
 courses = []
 
+marks = {}
 # Input and list student marks for each course
 
 
@@ -102,8 +104,15 @@ while True:
             list_students(students)
     elif user_choice == '3':
         os.system('cls')
-        course_choice = int(input("Enter the course number to show student marks: "))
-        show_student_marks(courses[course_choice - 1], students)
+        while True :
+            try:
+                list_courses(courses)
+                course_choice = int(input("\nEnter the course number to show student marks: "))
+                show_student_marks(courses[course_choice - 1], students, marks)
+                break
+            except Exception:
+                print("You haven't add marks yet")
+                break    
     elif user_choice == '4':
         os.system('cls')
         num_students = NoOfStudents()
@@ -120,10 +129,7 @@ while True:
         course_choice = int(input("Enter the course number to add marks for a student: "))
         list_students(students)
         student_choice = int(input("Enter the student number to add marks: "))
-        mark = float(input(f"Enter marks for {students[student_choice - 1]['name']} "
-                            f"({students[student_choice - 1]['id']}) in "
-                            f"{courses[course_choice - 1]['name']}: "))
-        courses[mark[students[student_choice - 1]['id']]] = mark
+        marks = student_mark(courses[course_choice-1], students)
         print("Marks added successfully!")
     elif user_choice == '7':
         os.system('cls')
