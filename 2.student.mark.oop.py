@@ -1,3 +1,4 @@
+import os
 class Entity:
     def __init__(self):
         self.__id = None
@@ -87,14 +88,8 @@ class Course(Entity):
             course = Course()
             course.set_id(course_id)
             course.set_name(name)
-            course.input_marks(students)
             courses.append(course)
-        return courses   
-    
-    def input_marks(self, students):
-        for student in students:
-            mark = float(input(f"Enter marks for {student.get_name()} ({student.get_id()}): "))
-            self.set_marks(student.get_id(), mark)    
+        return courses      
 
 class SchoolSystem(Entity):
     def __init__(self):
@@ -103,13 +98,19 @@ class SchoolSystem(Entity):
 
     def list_courses(self):
         print("---------LIST OF COURSES---------")
+        i = 0
         for course in self.courses:
+            print(f"{i+1}.", end =" ")
             course.list()
+            i = i+1
 
     def list_students(self):
         print("---------LIST OF STUDENTS---------")
+        i = 0
         for student in self.students:
+            print(f"{i+1}.", end =" ")
             student.list()
+            i = i+1
 
     def show_student_marks(self, course):
         print(f"---------STUDENT MARKS OF {course.get_name()} COURSE---------")
@@ -123,14 +124,65 @@ class SchoolSystem(Entity):
                 return student
         return None
 
+def display_menu():
+    print("---------MENU---------")
+    print("1. List Courses")
+    print("2. List Students")
+    print("3. Show Student Marks for a Course")
+    print("4. Add Student")
+    print("5. Add Course")
+    print("6. Add Marks for a Student in a Course")
+    print("7. Exit")
+    choice = input("Enter your choice (1-7): ")
+    return choice
+
 # Main
 school = SchoolSystem()
 Student_list = Student()
 Course_list = Course()
-school.students = Student_list.input()
-school.courses = Course_list.input(school.students)
-print("\n\n\n\n")
-school.list_courses()
-school.list_students()
-for course in school.courses:
-    school.show_student_marks(course)
+
+while True:
+    user_choice = display_menu()
+
+    if user_choice == '1':
+        os.system('cls')
+        if school.courses == []:
+            print("You haven't add any courses yet")
+        school.list_courses()
+    elif user_choice == '2':
+        os.system('cls')
+        if school.students == []:
+            print("You haven't add any student yet")
+        school.list_students()
+    elif user_choice == '3':
+        os.system('cls')
+        school.list_courses()
+        course_choice = int(input("Enter the course number to show student marks: "))
+        school.show_student_marks(school.courses[course_choice - 1])
+    elif user_choice == '4':
+        os.system('cls')
+        new_students = Student_list.input()
+        school.students.extend(new_students)
+        print("Students added successfully!")
+    elif user_choice == '5':
+        os.system('cls')
+        new_courses = Course_list.input(school.students)
+        school.courses.extend(new_courses)
+        print("Courses added successfully!")
+    elif user_choice == '6':
+        os.system('cls')
+        school.list_courses()
+        course_choice = int(input("Enter the course number to add marks for a student: "))
+        school.list_students()
+        student_choice = int(input("Enter the student number to add marks: "))
+        mark = float(input(f"Enter marks for {school.students[student_choice - 1].get_name()} "
+                            f"({school.students[student_choice - 1].get_id()}) in "
+                            f"{school.courses[course_choice - 1].get_name()}: "))
+        school.courses[course_choice - 1].set_marks(school.students[student_choice - 1].get_id(), mark)
+        print("Marks added successfully!")
+    elif user_choice == '7':
+        os.system('cls')
+        print("Exiting program. Goodbye!")
+        break
+    else:
+        print("Invalid choice. Please enter a number between 1 and 7.")
