@@ -25,7 +25,7 @@ def check_and_get_positive(stdscr, prompt, range):
       while True:
          try:
             value = int(InputBox(stdscr, prompt,0))
-            if value > 0 and value <= range:
+            if value > 0 and (value <= range and value != 0):
                return value
             elif (value == 0):
                stdscr.clear()
