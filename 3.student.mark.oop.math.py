@@ -8,8 +8,14 @@ def getmark(stdscr, prompt, range):
       while True:
          try:
             value = float(InputBox(stdscr, prompt,0))
-            if value > 0 and value <= range:
+            if value >= 0 and value <= range:
                return value
+            elif (value == -1):
+               stdscr.clear()
+               print_center(stdscr ,"You cancelled.\n")
+               stdscr.refresh()
+               stdscr.getch()
+               return 0
             else:
                stdscr.clear()
                print_center(stdscr ,"Invalid input. Please enter a positive, valid mark.\n")
@@ -25,9 +31,9 @@ def check_and_get_positive(stdscr, prompt, range):
       while True:
          try:
             value = int(InputBox(stdscr, prompt,0))
-            if value > 0 and (value <= range and value != 0):
+            if value >= 0 and (value <= range):
                return value
-            elif (value == 0):
+            elif (value == -1):
                stdscr.clear()
                print_center(stdscr ,"You cancelled.\n")
                stdscr.refresh()
@@ -107,20 +113,6 @@ class Entity:
       self.stdscr.addstr(table_row)
       self.stdscr.addstr("-" * table_width)
 
-   def input(self):
-      entity_count = self.check_and_get_positive(self.stdscr,"Enter the number of Entity: ", 100)
-      entities = []
-      for i in range(entity_count):
-         entity_id = InputBox(self.stdscr,f"Enter ID for Entity {i+1}: ",0)
-         name = InputBox(self.stdscr,f"Enter name for Entity {i+1}: ",0)
-         entity = Entity(self.stdscr)
-         entity.set_id(entity_id)
-         entity.set_name(name)
-         entities.append(entity)    
-      return entities
-   
-           # Add a new line after getting input
-
 class Student(Entity):
    def __init__(self, stdscr):
       super().__init__(stdscr)
@@ -134,7 +126,7 @@ class Student(Entity):
    
    def input(self):
       temp = []
-      student_count = check_and_get_positive(self.stdscr,"Enter the number of students: ",100)
+      student_count = check_and_get_positive(self.stdscr,"Enter the number of students ( -1 to back ): ",100)
       if student_count != 0 :
          for i in range(student_count):
             student_id = InputBox(self.stdscr,f"Enter student ID for student {i+1}: ",0)
@@ -182,7 +174,7 @@ class Course(Entity):
 
    def input(self, students):
       courses=[]
-      course_count = check_and_get_positive(self.stdscr,"Enter the number of courses: ", 10)
+      course_count = check_and_get_positive(self.stdscr,"Enter the number of courses ( -1 to back ): ", 10)
       if course_count != 0 :
          for i in range(course_count):
             course_id = InputBox(self.stdscr,f"Enter course ID for course {i+1}: ",0)
