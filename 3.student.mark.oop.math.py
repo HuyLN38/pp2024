@@ -2,8 +2,6 @@ import os
 import curses
 from curses.textpad import Textbox, rectangle
 from curses import wrapper
-import math
-import numpy
 from numpy import array
 
 def getmark(stdscr, prompt, range):
@@ -14,7 +12,7 @@ def getmark(stdscr, prompt, range):
                return value
             else:
                stdscr.clear()
-               print_center(stdscr ,"Invalid input. Please enter a positive, valid integer.\n")
+               print_center(stdscr ,"Invalid input. Please enter a positive, valid mark.\n")
                stdscr.refresh()
                stdscr.getch()
          except Exception:
@@ -29,6 +27,12 @@ def check_and_get_positive(stdscr, prompt, range):
             value = int(InputBox(stdscr, prompt,0))
             if value > 0 and value <= range:
                return value
+            elif (value == 0):
+               stdscr.clear()
+               print_center(stdscr ,"You cancelled.\n")
+               stdscr.refresh()
+               stdscr.getch()
+               return 0
             else:
                stdscr.clear()
                print_center(stdscr ,"Invalid input. Please enter a positive, valid integer.\n")
