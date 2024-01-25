@@ -31,9 +31,9 @@ def check_and_get_positive(stdscr, prompt, range):
       while True:
          try:
             value = int(InputBox(stdscr, prompt,0))
-            if value >= 0 and (value <= range):
+            if value > 0 and (value <= range):
                return value
-            elif (value == -1):
+            elif (value == 0):
                stdscr.clear()
                print_center(stdscr ,"You cancelled.\n")
                stdscr.refresh()
@@ -126,7 +126,7 @@ class Student(Entity):
    
    def input(self):
       temp = []
-      student_count = check_and_get_positive(self.stdscr,"Enter the number of students ( -1 to back ): ",100)
+      student_count = check_and_get_positive(self.stdscr,"Enter the number of students ( 0 to back ): ",100)
       if student_count != 0 :
          for i in range(student_count):
             student_id = InputBox(self.stdscr,f"Enter student ID for student {i+1}: ",0)
@@ -157,7 +157,7 @@ class Course(Entity):
       mark_column_width = table_width - id_column_width - name_column_width - 8
       id_str = self.get_id().ljust(id_column_width)
       name_str = self.get_name().ljust(name_column_width)
-      credits_str = self.get_credits().ljust(mark_column_width)
+      credits_str = str(self.get_credits()).ljust(mark_column_width)
       table_row = f"| {id_str} | {name_str} | {credits_str}"
 
       self.stdscr.addstr(table_row)
@@ -174,7 +174,7 @@ class Course(Entity):
 
    def input(self, students):
       courses=[]
-      course_count = check_and_get_positive(self.stdscr,"Enter the number of courses ( -1 to back ): ", 10)
+      course_count = check_and_get_positive(self.stdscr,"Enter the number of courses ( 0 to back ): ", 10)
       if course_count != 0 :
          for i in range(course_count):
             course_id = InputBox(self.stdscr,f"Enter course ID for course {i+1}: ",0)
@@ -409,13 +409,15 @@ def menu_function(stdscr,user_choice):
       elif user_choice == '4':
          os.system('cls')
          new_students = Student_list.input()
-         school.students.extend(new_students)
-         print_center(stdscr,("Students added successfully!"))
+         if new_students != None:
+            school.students.extend(new_students)
+            print_center(stdscr,("Students added successfully!"))
       elif user_choice == '5':
          os.system('cls')
          new_courses = Course_list.input(school.students)
-         school.courses.extend(new_courses)
-         print_center(stdscr,("Courses added successfully!"))
+         if new_courses != None:
+            school.courses.extend(new_courses)
+            print_center(stdscr,("Courses added successfully!"))
       elif user_choice == '6':
          select_menu = []
          current_row = 0
