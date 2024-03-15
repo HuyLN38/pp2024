@@ -15,7 +15,7 @@ def run_shell_command(command):
         print(f"An error occurred: {str(e)}")
 
 while True:
-    user_input = input("$-> ")
+    user_input = input("\033[1;32mEnter a command: ")
     if user_input.lower() == "exit":
         break
     run_shell_command(user_input)
