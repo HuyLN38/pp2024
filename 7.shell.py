@@ -7,10 +7,10 @@ def run_shell_command(command):
         # Check if the command executed successfully
         if result.returncode == 0:
             # Print the output of the shell command
-            print(result.stdout)
+            print("\033[1;37;40m" + result.stdout)
         else:
             # Print the error message if the command failed
-            print(result.stderr)
+            print("\033[1;31;40m" + result.stderr)
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
